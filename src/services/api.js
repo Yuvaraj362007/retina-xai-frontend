@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://retina-xai-frontend.onrender.com';
+const API_BASE_URL = 'https://sessions-toolbar-titles-instances.trycloudflare.com';
 
 export const api = {
 
