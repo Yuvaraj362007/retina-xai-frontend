@@ -4,6 +4,6 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    allowedHosts: ['artistic-decrease-series-directions.trycloudflare.com'],
+    allowedHosts: ['trains-debate-giant-belt.trycloudflare.com'],
   },
 })

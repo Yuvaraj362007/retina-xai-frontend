@@ -398,12 +398,28 @@ async def analyze_image(
                 "gradcam"
             )
 
-            gradcam_service.generate(
+            gradcam_result = gradcam_service.generate(
                 image=image,
                 predicted_class=model_result[
                     "predicted_class"
                 ],
                 output_path=gradcam_path,
+            )
+
+            lesion_map_path = generate_processed_path(
+                "lesion_map"
+            )
+
+            candidate_map_result = (
+                gradcam_service.generate_candidate_map(
+                    grayscale_cam=gradcam_result[
+                        "grayscale_cam"
+                    ],
+                    original_resized=gradcam_result[
+                        "original_resized"
+                    ],
+                    output_path=lesion_map_path,
+                )
             )
 
             explainability_result = {
@@ -417,6 +433,21 @@ async def analyze_image(
                     "predicted_label"
                 ],
                 "output_file": gradcam_path,
+                "lesion_map_file": candidate_map_result[
+                    "lesion_map_path"
+                ],
+                "candidate_region_count": candidate_map_result[
+                    "candidate_region_count"
+                ],
+                "candidate_regions": candidate_map_result[
+                    "candidate_regions"
+                ],
+                "lesion_map_status": "completed",
+                "lesion_map_note": (
+                    "AI-highlighted candidate regions "
+                    "derived from Grad-CAM activation; "
+                    "not confirmed clinical lesions."
+                ),
             }
 
         except Exception as e:

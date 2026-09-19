@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://tent-value-brand-epinions.trycloudflare.com';
+const API_BASE_URL = 'http://localhost:8000';
 
 export const api = {
 
@@ -36,6 +36,17 @@ export const api = {
     const evidence = data.evidence || {};
 
     let gradcamUrl = null;
+    let lesionUrl = null;
+
+    if (explainability.lesion_map_file) {
+      const filename = explainability.lesion_map_file
+        .split('/')
+        .pop();
+
+      lesionUrl = `${API_BASE_URL}/processed/${filename}`;
+    }
+
+
 
     if (explainability.output_file) {
       const filename = explainability.output_file
@@ -70,6 +81,7 @@ export const api = {
             ? `Grad-CAM generated for the model prediction: ${explainability.target_label}.`
             : 'Grad-CAM attribution generated.',
         gradcamUrl,
+        lesionUrl,
       },
 
       evidence: [
@@ -132,16 +144,29 @@ export const api = {
   },
 
   async submitPilotRequest(formData) {
+    const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwVxZqszC4xZeDsEflaH7M95I-IeNB5LBiJHcfiujNJM965epXaIrgRHpeZvt-oUNA/exec';
 
-    console.log(
-      'Pilot request:',
-      formData
-    );
+    try {
+      await fetch(GOOGLE_SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify(formData)
+      });
 
-    return {
-      success: true,
-      message: 'Inquiry registered successfully!'
-    };
+      return {
+        success: true,
+        message: 'Inquiry registered successfully!'
+      };
+    } catch (error) {
+      console.error('Pilot request failed:', error);
+
+      return {
+        success: false,
+        message: 'Unable to register inquiry. Please try again.'
+      };
+    }
   }
-
 };
