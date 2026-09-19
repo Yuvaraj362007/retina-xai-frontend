@@ -36,7 +36,9 @@ processed/
 backend/.venv-ai/
 
 # Local backend runtime/data
-backend/database/
+backend/database/*
+!backend/database/
+!backend/database/*.py
 backend/storage/
 
 # Local test/temp files
