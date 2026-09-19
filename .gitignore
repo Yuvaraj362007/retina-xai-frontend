@@ -39,7 +39,8 @@ backend/.venv-ai/
 backend/database/*
 !backend/database/
 !backend/database/*.py
-backend/storage/
-
+backend/storage/*
+!backend/storage/
+!backend/storage/*.py
 # Local test/temp files
 backend/test.txt
