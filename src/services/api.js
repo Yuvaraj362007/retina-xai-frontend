@@ -1,5 +1,4 @@
-const API_BASE_URL = 'https://sessions-toolbar-titles-instances.trycloudflare.com';
-
+const API_BASE_URL = 'https://recipe-realtor-programs-britain.trycloudflare.com';
 export const api = {
 
   async analyzeFundusImage(imageFile) {
