@@ -35,6 +35,34 @@ const Report = ({ data }) => {
 
   const qualityPass = String(imageQuality).toUpperCase() === 'PASS';
 
+  const handleVoiceGuidance = () => {
+    if (!('speechSynthesis' in window)) {
+      alert('Voice guidance is not supported in this browser.');
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    const message = reviewRequired
+      ? 'உங்கள் கண் பரிசோதனை முடிந்தது. மேலும் பரிசோதனைக்காக தகுதியான கண் மருத்துவரை அணுகவும்.'
+      : 'உங்கள் கண் பரிசோதனை முடிந்தது. அடுத்த கட்டத்திற்கு சுகாதார பணியாளரின் ஆலோசனையைப் பின்பற்றவும்.';
+
+    const utterance = new SpeechSynthesisUtterance(message);
+    utterance.lang = 'ta-IN';
+    utterance.rate = 0.9;
+
+    const voices = window.speechSynthesis.getVoices();
+    const tamilVoice = voices.find((voice) =>
+      voice.lang.toLowerCase().startsWith('ta')
+    );
+
+    if (tamilVoice) {
+      utterance.voice = tamilVoice;
+    }
+
+    window.speechSynthesis.speak(utterance);
+  };
+
   return (
     <div className="bg-white text-slate-900 rounded-2xl shadow-lg border border-slate-200 p-8 flex flex-col gap-8 font-sans max-w-4xl mx-auto my-12">
       {/* Header */}
@@ -100,9 +128,10 @@ const Report = ({ data }) => {
         <div className="mt-5 flex flex-col sm:flex-row gap-3">
           <button
             type="button"
+            onClick={handleVoiceGuidance}
             className="px-4 py-3 rounded-xl bg-slate-900 text-white text-sm font-semibold"
           >
-            🔊 Listen in local language
+            🔊 Play in Tamil
           </button>
 
           <div className="px-4 py-3 rounded-xl bg-white border border-slate-200 text-sm text-slate-700">
