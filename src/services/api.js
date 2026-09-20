@@ -81,6 +81,8 @@ export const api = {
             : 'Grad-CAM attribution generated.',
         gradcamUrl,
         lesionUrl,
+        candidate_region_count: explainability.candidate_region_count ?? 0,
+        candidate_regions: explainability.candidate_regions || [],
       },
 
       evidence: [
